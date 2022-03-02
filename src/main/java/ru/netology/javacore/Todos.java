@@ -28,8 +28,8 @@ public class Todos {
         return sj.toString();
     }
 
-    public void setListTasks(List<String> listTasks) {
-        this.listTasks = listTasks;
+    public List<String> getListTasks() {
+        return listTasks;
     }
 
 }

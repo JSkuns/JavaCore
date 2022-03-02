@@ -2,17 +2,25 @@ package ru.netology.javacore;
 
 import org.junit.jupiter.api.*;
 
-import java.util.ArrayList;
-
 class TodosTests {
 
-    static Thread thread;
-    static Todos todos;
+    private static Todos todos;
+    private static Thread thread;
 
     @BeforeAll
     static void start() {
         thread = new Thread(TodosTests::setUp);
         thread.start();
+    }
+
+    @BeforeEach
+    private void startEach() {
+        todos = new Todos();
+    }
+
+    @AfterEach
+    private void finishEach() {
+        todos = null;
     }
 
     @AfterAll
@@ -21,7 +29,6 @@ class TodosTests {
     }
 
     private static void setUp() {
-        todos = new Todos();
         TodoServer server = new TodoServer(8989, todos);
         server.start();
     }
@@ -29,10 +36,9 @@ class TodosTests {
     @Test
     void addTask() {
         todos.addTask("Купить кабель");
-        String actual = todos.getAllTasks();
-        String expected = "Купить кабель";
+        String actual = todos.getListTasks().toString();
+        String expected = "[Купить кабель]";
         Assertions.assertEquals(expected, actual);
-        todos.setListTasks(new ArrayList<>());
     }
 
     @Test
@@ -43,7 +49,6 @@ class TodosTests {
         String actual = todos.getAllTasks();
         String expected = "Выкинуть мусор Купить кабель Помыть авто";
         Assertions.assertEquals(expected, actual);
-        todos.setListTasks(new ArrayList<>());
     }
 
     @Test
@@ -51,10 +56,9 @@ class TodosTests {
         todos.addTask("Купить кабель");
         todos.addTask("Помыть авто");
         todos.removeTask("Помыть авто");
-        String actual = todos.getAllTasks();
-        String expected = "Купить кабель";
+        String actual = todos.getListTasks().toString();
+        String expected = "[Купить кабель]";
         Assertions.assertEquals(expected, actual);
-        todos.setListTasks(new ArrayList<>());
     }
 
 }
